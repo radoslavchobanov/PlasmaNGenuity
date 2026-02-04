@@ -4,7 +4,6 @@
 
 HyperX only provides NGenuity (Windows-only) for configuring their mice. This project provides a complete Linux alternative with both a **native KDE Plasma 6 widget** and a standalone Qt application.
 
-[![PyPI](https://img.shields.io/pypi/v/plasmangenuity)](https://pypi.org/project/plasmangenuity/)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8%2B-green)](https://www.python.org/)
 [![KDE Plasma 6](https://img.shields.io/badge/KDE_Plasma-6-blue)](https://kde.org/plasma-desktop/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow)](LICENSE)
