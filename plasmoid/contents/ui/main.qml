@@ -5,6 +5,7 @@
 
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Controls as QQC2
 import org.kde.plasma.plasmoid
 import org.kde.plasma.components as PlasmaComponents
 import org.kde.plasma.extras as PlasmaExtras
@@ -343,7 +344,7 @@ PlasmoidItem {
     }
 
     // Info Tab Component
-    component InfoTab: ScrollView {
+    component InfoTab: QQC2.ScrollView {
         ColumnLayout {
             width: parent.width
             spacing: Kirigami.Units.largeSpacing
@@ -485,7 +486,7 @@ PlasmoidItem {
     }
 
     // DPI Tab Component
-    component DpiTab: ScrollView {
+    component DpiTab: QQC2.ScrollView {
         ColumnLayout {
             width: parent.width
             spacing: Kirigami.Units.largeSpacing
@@ -551,7 +552,7 @@ PlasmoidItem {
     }
 
     // LED Tab Component
-    component LedTab: ScrollView {
+    component LedTab: QQC2.ScrollView {
         ColumnLayout {
             width: parent.width
             spacing: Kirigami.Units.largeSpacing
@@ -606,7 +607,7 @@ PlasmoidItem {
     }
 
     // Buttons Tab Component
-    component ButtonsTab: ScrollView {
+    component ButtonsTab: QQC2.ScrollView {
         ColumnLayout {
             width: parent.width
             spacing: Kirigami.Units.largeSpacing
@@ -633,7 +634,7 @@ PlasmoidItem {
     }
 
     // Settings Tab Component
-    component SettingsTab: ScrollView {
+    component SettingsTab: QQC2.ScrollView {
         ColumnLayout {
             width: parent.width
             spacing: Kirigami.Units.largeSpacing
