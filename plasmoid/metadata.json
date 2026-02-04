@@ -1,0 +1,19 @@
+{
+    "KPackageStructure": "Plasma/Applet",
+    "KPlugin": {
+        "Id": "org.kde.plasma.plasmangenuity",
+        "Name": "PlasmaNGenuity",
+        "Description": "Monitor HyperX Pulsefire Dart mouse battery and settings",
+        "Icon": "input-mouse",
+        "Authors": [
+            {
+                "Name": "Radoslav Chobanov"
+            }
+        ],
+        "Category": "System Information",
+        "License": "MIT",
+        "Version": "1.0.0"
+    },
+    "X-Plasma-API-Minimum-Version": "6.0",
+    "X-Plasma-NotificationAreaCategory": "Hardware"
+}
