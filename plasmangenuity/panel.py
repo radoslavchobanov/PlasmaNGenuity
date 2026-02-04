@@ -7,8 +7,8 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import Qt, QPoint, QRect, QPropertyAnimation, QEasingCurve
 from PyQt5.QtGui import QPainter, QColor, QPainterPath, QRegion, QPalette
 
-from hyperx_battery.device import HyperXDevice
-from hyperx_battery.widgets import (
+from plasmangenuity.device import HyperXDevice
+from plasmangenuity.widgets import (
     InfoSection, SettingsSection, LedSection,
     DpiSection, ButtonsSection, MacrosSection
 )

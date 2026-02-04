@@ -3,7 +3,7 @@
 from typing import Optional, Tuple, List, Dict, Any
 import hid
 
-from hyperx_battery.protocol import (
+from plasmangenuity.protocol import (
     PACKET_SIZE,
     CMD_HEARTBEAT,
     build_heartbeat_packet,

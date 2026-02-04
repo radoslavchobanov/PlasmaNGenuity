@@ -3,13 +3,13 @@ post_install() {
     udevadm control --reload-rules
     udevadm trigger
     echo ""
-    echo ">>> HyperX Pulsefire Dart Configuration Tool installed!"
+    echo ">>> PlasmaNGenuity installed!"
     echo ""
     echo "    To start the tray application:"
-    echo "      hyperx-battery-tray &"
+    echo "      plasmangenuity-tray &"
     echo ""
     echo "    CLI usage:"
-    echo "      hyperx-battery"
+    echo "      plasmangenuity"
     echo ""
     echo "    If the device is not detected, unplug and replug the wireless dongle."
     echo ""

@@ -663,7 +663,7 @@ PlasmoidItem {
             PlasmaComponents.Button {
                 text: "Open Configuration Panel"
                 icon.name: "configure"
-                onClicked: executable.connectSource("hyperx-battery-tray &")
+                onClicked: executable.connectSource("plasmangenuity-tray &")
             }
 
             Item { Layout.fillHeight: true }
@@ -691,7 +691,7 @@ PlasmoidItem {
             PlasmaComponents.Button {
                 text: "Open Configuration Panel"
                 icon.name: "configure"
-                onClicked: executable.connectSource("hyperx-battery-tray &")
+                onClicked: executable.connectSource("plasmangenuity-tray &")
             }
 
             Item { Layout.fillHeight: true }

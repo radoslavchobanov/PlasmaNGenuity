@@ -1,10 +1,10 @@
-# HyperX Pulsefire Dart Configuration Tool
+# PlasmaNGenuity
 
 **Full NGenuity replacement for the HyperX Pulsefire Dart wireless gaming mouse on Linux.**
 
 HyperX only provides NGenuity (Windows-only) for configuring their mice. This project provides a complete Linux alternative with both a **native KDE Plasma 6 widget** and a standalone Qt application.
 
-[![PyPI](https://img.shields.io/pypi/v/hyperx-pulsefire-battery)](https://pypi.org/project/hyperx-pulsefire-battery/)
+[![PyPI](https://img.shields.io/pypi/v/plasmangenuity)](https://pypi.org/project/plasmangenuity/)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8%2B-green)](https://www.python.org/)
 [![KDE Plasma 6](https://img.shields.io/badge/KDE_Plasma-6-blue)](https://kde.org/plasma-desktop/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-yellow)](LICENSE)
@@ -18,8 +18,8 @@ A native system tray widget for KDE Plasma 6 that monitors your HyperX Pulsefire
 ### Quick Install (Plasma Widget)
 
 ```bash
-git clone https://github.com/radoslavchobanov/hyperx-pulsefire-battery.git
-cd hyperx-pulsefire-battery
+git clone https://github.com/radoslavchobanov/plasmangenuity.git
+cd plasmangenuity
 ./install-plasmoid.sh
 ```
 
@@ -84,8 +84,8 @@ A Plasma-style popup panel with full mouse configuration:
 ### Option 1: Plasma Widget Only
 
 ```bash
-git clone https://github.com/radoslavchobanov/hyperx-pulsefire-battery.git
-cd hyperx-pulsefire-battery
+git clone https://github.com/radoslavchobanov/plasmangenuity.git
+cd plasmangenuity
 ./install-plasmoid.sh
 ```
 
@@ -112,16 +112,16 @@ sudo dnf install hidapi python3-qt5 python3-pyudev python3-hidapi
 
 ```bash
 # Full installation with GUI
-pip install "hyperx-pulsefire-battery[tray]"
+pip install "plasmangenuity[tray]"
 
 # CLI only
-pip install hyperx-pulsefire-battery
+pip install plasmangenuity
 ```
 
 #### 3. Set up udev rules (required for non-root access)
 
 ```bash
-sudo cp 99-hyperx-pulsefire.rules /etc/udev/rules.d/
+sudo cp 99-plasmangenuity.rules /etc/udev/rules.d/
 sudo udevadm control --reload-rules
 sudo udevadm trigger
 ```
@@ -131,8 +131,8 @@ Then **unplug and replug** your wireless dongle.
 ### Option 3: Arch Linux / Manjaro (PKGBUILD)
 
 ```bash
-git clone https://github.com/radoslavchobanov/hyperx-pulsefire-battery.git
-cd hyperx-pulsefire-battery
+git clone https://github.com/radoslavchobanov/plasmangenuity.git
+cd plasmangenuity
 makepkg -si
 ```
 
@@ -152,23 +152,23 @@ After installation, the widget appears in your system tray. If not visible:
 ### Standalone Tray Application
 
 ```bash
-hyperx-battery-tray &
+plasmangenuity-tray &
 ```
 
 ### CLI
 
 ```bash
 # Show battery status
-hyperx-battery
+plasmangenuity
 
 # JSON output (for scripts/waybar)
-hyperx-battery --json
+plasmangenuity --json
 
 # Continuous monitoring
-hyperx-battery --watch --interval 10
+plasmangenuity --watch --interval 10
 
 # List detected devices
-hyperx-battery --list
+plasmangenuity --list
 ```
 
 ---
@@ -177,8 +177,8 @@ hyperx-battery --list
 
 ### "Device not found"
 - Ensure the wireless dongle is plugged in
-- Check udev rules: `ls /etc/udev/rules.d/99-hyperx-pulsefire.rules`
-- Run `hyperx-battery --list` to see detected interfaces
+- Check udev rules: `ls /etc/udev/rules.d/99-plasmangenuity.rules`
+- Run `plasmangenuity --list` to see detected interfaces
 - Try running with `sudo` to rule out permission issues
 
 ### "IO Error: open failed"
@@ -203,7 +203,7 @@ kpackagetool6 -t Plasma/Applet -r org.kde.plasma.plasmangenuity
 
 ### pip package
 ```bash
-pip uninstall hyperx-pulsefire-battery
+pip uninstall plasmangenuity
 ```
 
 ---

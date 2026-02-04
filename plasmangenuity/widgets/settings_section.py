@@ -6,7 +6,7 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtCore import Qt
 
-from hyperx_battery.device import HyperXDevice
+from plasmangenuity.device import HyperXDevice
 
 
 class SettingsSection(QWidget):

@@ -7,8 +7,8 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor
 
-from hyperx_battery.device import HyperXDevice
-from hyperx_battery.protocol import LedTarget, LedEffect
+from plasmangenuity.device import HyperXDevice
+from plasmangenuity.protocol import LedTarget, LedEffect
 
 
 class LedSection(QWidget):

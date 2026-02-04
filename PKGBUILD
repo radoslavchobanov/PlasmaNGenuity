@@ -1,5 +1,5 @@
 # Maintainer: Radoslav Chobanov <rado.chobanov97@gmail.com>
-# HyperX Pulsefire Dart Configuration Tool - NGenuity replacement for Linux
+# PlasmaNGenuity - NGenuity replacement for HyperX Pulsefire Dart on Linux
 #
 # Build from local source:
 #   makepkg -si
@@ -7,12 +7,12 @@
 # Build from Git:
 #   Uncomment the git source below and comment out the local source
 
-pkgname=hyperx-pulsefire-battery
+pkgname=plasmangenuity
 pkgver=2.0.0
 pkgrel=1
 pkgdesc="Full configuration tool and battery monitor for HyperX Pulsefire Dart wireless mouse on Linux - NGenuity replacement"
 arch=('any')
-url="https://github.com/radoslavchobanov/hyperx-pulsefire-battery"
+url="https://github.com/radoslavchobanov/plasmangenuity"
 license=('MIT')
 depends=(
     'python>=3.8'
@@ -26,8 +26,8 @@ makedepends=(
     'python-wheel'
     'python-setuptools'
 )
-backup=('etc/udev/rules.d/99-hyperx-pulsefire.rules')
-install=hyperx-pulsefire-battery.install
+backup=('etc/udev/rules.d/99-plasmangenuity.rules')
+install=plasmangenuity.install
 
 # For local builds (run makepkg in the repo directory)
 source=()
@@ -47,13 +47,13 @@ package() {
     python -m installer --destdir="$pkgdir" dist/*.whl
 
     # Install udev rules
-    install -Dm644 99-hyperx-pulsefire.rules "$pkgdir/usr/lib/udev/rules.d/99-hyperx-pulsefire.rules"
+    install -Dm644 99-plasmangenuity.rules "$pkgdir/usr/lib/udev/rules.d/99-plasmangenuity.rules"
 
     # Install desktop file for autostart
-    install -Dm644 hyperx-battery-tray.desktop "$pkgdir/usr/share/applications/hyperx-battery-tray.desktop"
+    install -Dm644 plasmangenuity.desktop "$pkgdir/usr/share/applications/plasmangenuity.desktop"
 
     # Install autostart entry
-    install -Dm644 hyperx-battery-tray.desktop "$pkgdir/etc/xdg/autostart/hyperx-battery-tray.desktop"
+    install -Dm644 plasmangenuity.desktop "$pkgdir/etc/xdg/autostart/plasmangenuity.desktop"
 
     # Install license
     install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"

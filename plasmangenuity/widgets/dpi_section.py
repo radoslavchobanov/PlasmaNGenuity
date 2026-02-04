@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QColor
 
-from hyperx_battery.device import HyperXDevice
+from plasmangenuity.device import HyperXDevice
 
 
 class DpiProfileRow(QWidget):

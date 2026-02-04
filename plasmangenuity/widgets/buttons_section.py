@@ -7,8 +7,8 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import Qt, QEvent
 from PyQt5.QtGui import QKeySequence
 
-from hyperx_battery.device import HyperXDevice
-from hyperx_battery.protocol import (
+from plasmangenuity.device import HyperXDevice
+from plasmangenuity.protocol import (
     ButtonType, MouseButton, MediaCode, DpiFunction,
     BUTTON_NAMES, MEDIA_CODE_NAMES,
 )

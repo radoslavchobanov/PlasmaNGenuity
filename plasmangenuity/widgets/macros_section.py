@@ -7,11 +7,11 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtCore import Qt
 
-from hyperx_battery.device import HyperXDevice
-from hyperx_battery.protocol import (
+from plasmangenuity.device import HyperXDevice
+from plasmangenuity.protocol import (
     MacroEvent, MacroRepeatMode, BUTTON_NAMES,
 )
-from hyperx_battery.widgets.buttons_section import KEYBOARD_CODES
+from plasmangenuity.widgets.buttons_section import KEYBOARD_CODES
 
 
 # Reverse lookup for keyboard codes
@@ -231,7 +231,7 @@ class MacrosSection(QWidget):
             return
 
         # Set button to macro type
-        from hyperx_battery.protocol import ButtonType
+        from plasmangenuity.protocol import ButtonType
         success = self._device.set_button(button_idx, ButtonType.MACRO, 0x00)
         if success:
             QMessageBox.information(

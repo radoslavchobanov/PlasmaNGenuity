@@ -6,7 +6,7 @@ import json
 import time
 import argparse
 
-from hyperx_battery.device import find_device, get_battery_status, list_devices
+from plasmangenuity.device import find_device, get_battery_status, list_devices
 
 
 def main():

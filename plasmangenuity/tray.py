@@ -14,12 +14,12 @@ from PyQt5.QtCore import QTimer, Qt, pyqtSignal, QObject, QPointF, QRectF
 
 import pyudev
 
-from hyperx_battery.device import (
+from plasmangenuity.device import (
     find_device,
     get_battery_status,
     VENDOR_ID_STR,
 )
-from hyperx_battery.config import Config
+from plasmangenuity.config import Config
 
 
 class _DeviceSignal(QObject):
@@ -403,7 +403,7 @@ class BatteryTrayIcon(QSystemTrayIcon):
     def _show_panel(self):
         """Create and show the configuration panel."""
         # Lazy import to avoid circular dependency
-        from hyperx_battery.panel import ConfigPanel
+        from plasmangenuity.panel import ConfigPanel
         from PyQt5.QtGui import QCursor
 
         # Stop polling while panel is open (panel uses device connection)
