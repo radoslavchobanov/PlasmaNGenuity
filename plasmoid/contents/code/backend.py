@@ -2,6 +2,8 @@
 """
 PlasmaNGenuity - Plasma Widget Backend
 Outputs comprehensive device status as JSON for the KDE Plasma applet
+
+Uses the same protocol as the main hyperx_battery module.
 """
 
 import json
@@ -23,12 +25,14 @@ PRODUCT_ID_WIRED = 0x16E2
 USAGE_PAGE_WIRELESS = 0xFF00
 USAGE_PAGE_WIRED = 0xFF13
 
-# HID packet size and commands
+# HID packet size
 PACKET_SIZE = 64
+
+# Command bytes (from protocol.py)
 CMD_HW_INFO = 0x50
 CMD_HEARTBEAT = 0x51
-CMD_LED_QUERY = 0xD2
-CMD_DPI_QUERY = 0xD3
+CMD_LED_QUERY = 0x52
+CMD_DPI_QUERY = 0x53
 
 
 def find_device():
@@ -49,83 +53,96 @@ def find_device():
     return None, None
 
 
-def send_command(dev, cmd, expect_response=True):
-    """Send a command and optionally read response."""
+def _make_packet(data):
+    """Create a 64-byte HID packet with report ID prefix."""
     packet = [0x00] * PACKET_SIZE
     packet[0] = 0x00  # Report ID
-    packet[1] = cmd
+    for i, byte in enumerate(data):
+        if i + 1 < PACKET_SIZE:
+            packet[i + 1] = byte
+    return packet
+
+
+def send_command(dev, cmd):
+    """Send a command and read response."""
+    packet = _make_packet([cmd])
     dev.write(packet)
-
-    if expect_response:
-        response = dev.read(PACKET_SIZE, timeout_ms=1000)
-        return response
-    return None
-
-
-def get_device_info(dev):
-    """Query hardware information."""
-    response = send_command(dev, CMD_HW_INFO)
-    if not response or response[0] != CMD_HW_INFO:
-        return None
-
-    # Parse firmware version from bytes 4-7
-    fw_bytes = response[4:8]
-    firmware = ".".join(str(b) for b in fw_bytes if b != 0) or "Unknown"
-
-    # Device name from bytes 8-39 (null-terminated string)
-    name_bytes = response[8:40]
-    try:
-        name_end = name_bytes.index(0)
-        device_name = bytes(name_bytes[:name_end]).decode('ascii', errors='ignore')
-    except ValueError:
-        device_name = bytes(name_bytes).decode('ascii', errors='ignore')
-
-    return {
-        "firmware": firmware,
-        "device_name": device_name.strip() or "HyperX Pulsefire Dart",
-        "vendor_id": f"0x{VENDOR_ID:04X}",
-        "product_id": f"0x{response[2]:02X}{response[3]:02X}" if len(response) > 3 else "Unknown"
-    }
+    response = dev.read(PACKET_SIZE, timeout_ms=1000)
+    return response
 
 
 def get_battery_status(dev):
     """Query battery status from the mouse."""
     response = send_command(dev, CMD_HEARTBEAT)
-    if not response or response[0] != CMD_HEARTBEAT:
+    if not response or len(response) < 6 or response[0] != CMD_HEARTBEAT:
         return None, None
-
     return response[4], response[5] == 0x01
+
+
+def get_hw_info(dev):
+    """Query hardware information."""
+    response = send_command(dev, CMD_HW_INFO)
+    if not response or len(response) < 32 or response[0] != CMD_HW_INFO:
+        return None
+
+    # Product ID at bytes 4-5 (little-endian)
+    product_id = response[4] | (response[5] << 8)
+
+    # Vendor ID at bytes 6-7 (little-endian)
+    vendor_id = response[6] | (response[7] << 8)
+
+    # Device name is null-terminated string starting at byte 12
+    name_bytes = response[12:44]
+    null_idx = name_bytes.index(0) if 0 in name_bytes else len(name_bytes)
+    device_name = bytes(name_bytes[:null_idx]).decode('ascii', errors='ignore')
+
+    # Firmware version from byte 3
+    firmware_version = f"{response[3]}.0.0"
+
+    return {
+        "firmware": firmware_version,
+        "device_name": device_name or "HyperX Pulsefire Dart",
+        "vendor_id": f"0x{vendor_id:04X}",
+        "product_id": f"0x{product_id:04X}"
+    }
 
 
 def get_dpi_settings(dev):
     """Query DPI settings."""
     response = send_command(dev, CMD_DPI_QUERY)
-    if not response or response[0] != CMD_DPI_QUERY:
+    if not response or len(response) < 30 or response[0] != CMD_DPI_QUERY:
         return None
 
-    active_profile = response[2]
-    enabled_mask = response[3]
+    # Active profile at byte 5
+    active_profile = response[5]
 
+    # DPI values are 2-byte little-endian at bytes 10, 12, 14, 16, 18
+    # Each value is DPI / 50
+    dpi_offsets = [10, 12, 14, 16, 18]
+    dpi_values = []
+    for offset in dpi_offsets:
+        raw = response[offset] | (response[offset + 1] << 8)
+        dpi_values.append(raw * 50)
+
+    # Colors are at bytes 22+ (3 bytes RGB per profile)
+    colors = []
+    for i in range(5):
+        offset = 22 + i * 3
+        if offset + 2 < len(response):
+            r, g, b = response[offset], response[offset + 1], response[offset + 2]
+            colors.append(f"#{r:02X}{g:02X}{b:02X}")
+        else:
+            colors.append("#FFFFFF")
+
+    # Build profiles list
     profiles = []
     for i in range(5):
-        # DPI value (2 bytes per profile, starting at offset 4)
-        dpi_low = response[4 + i * 2]
-        dpi_high = response[5 + i * 2]
-        dpi = (dpi_high << 8) | dpi_low
-        if dpi == 0:
-            dpi = 800  # Default
-
-        # Color (3 bytes per profile, starting at offset 14)
-        r = response[14 + i * 3]
-        g = response[15 + i * 3]
-        b = response[16 + i * 3]
-
         profiles.append({
             "index": i + 1,
-            "dpi": dpi,
-            "enabled": bool(enabled_mask & (1 << i)),
+            "dpi": dpi_values[i] if i < len(dpi_values) else 800,
+            "enabled": True,  # Query doesn't return enable mask directly
             "active": i == active_profile,
-            "color": f"#{r:02X}{g:02X}{b:02X}"
+            "color": colors[i] if i < len(colors) else "#FFFFFF"
         })
 
     return {
@@ -137,21 +154,21 @@ def get_dpi_settings(dev):
 def get_led_settings(dev):
     """Query LED settings."""
     response = send_command(dev, CMD_LED_QUERY)
-    if not response or response[0] != CMD_LED_QUERY:
+    if not response or len(response) < 21 or response[0] != CMD_LED_QUERY:
         return None
 
-    effects = ["Static", "Breathing", "Spectrum Cycle", "Trigger Fade"]
-    targets = ["Logo", "Scroll Wheel", "Both"]
-
-    effect_idx = min(response[2], len(effects) - 1)
-    target_idx = min(response[3], len(targets) - 1)
+    # LED data at bytes 17-20: brightness, R, G, B
+    brightness = response[17]
+    r = response[18]
+    g = response[19]
+    b = response[20]
 
     return {
-        "effect": effects[effect_idx],
-        "target": targets[target_idx],
-        "color": f"#{response[4]:02X}{response[5]:02X}{response[6]:02X}",
-        "brightness": response[7],
-        "speed": response[8]
+        "effect": "Static",  # Query doesn't return effect type clearly
+        "target": "Both",
+        "color": f"#{r:02X}{g:02X}{b:02X}",
+        "brightness": brightness,
+        "speed": 0
     }
 
 
@@ -186,7 +203,7 @@ def main():
             result["charging"] = False
 
         # Get hardware info
-        hw_info = get_device_info(dev)
+        hw_info = get_hw_info(dev)
         if hw_info:
             result["hw_info"] = hw_info
 
